@@ -26,7 +26,7 @@ actions: {
             saveUser(user)
             blogService.setToken(user.token);
             set({user})
-            useNotificationStore.getState().actions.setNotification("login successful", "success");
+            useNotificationStore.getState().actions.setNotification(`${user.name} logged in`, "success");
         } catch (error) {
             const msg = error.response?.data?.error || "Wrong credentials";
             useNotificationStore.getState().actions.setNotification(msg, "error");
