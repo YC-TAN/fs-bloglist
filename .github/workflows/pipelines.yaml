@@ -1,0 +1,56 @@
+name: Bloglist deployment pipeline
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches: [main]
+        types: [opened, synchronize]
+
+jobs:
+    setup_and_test:
+        runs-on: ubuntu-latest
+
+        services:
+            mongodb:
+                image: mongo:8
+                ports:
+                - 27017:27017
+
+        env:
+            MONGODB_URI: mongodb://localhost:27017/blogapp-test
+            TEST_MONGODB_URI: mongodb://localhost:27017/blogapp-test
+            SECRET: ${{ secrets.SECRET }}
+            PORT: 3001
+
+        steps:
+            - uses: actions/checkout@v6
+            - uses: actions/setup-node@v6
+              with:
+                node-version: '24'
+
+            - name: Install server dependencies
+              working-directory: ./server
+              run: npm install  
+
+            - name: Testing server
+              working-directory: ./server
+              run: npm run test:conc
+              
+            - name: Install frontend dependencies
+              working-directory: ./client
+              run: npm install
+
+            - name: Frontend ESLint
+              working-directory: ./client
+              run: npm run lint
+
+            - name: Testing client
+              working-directory: ./client
+              run: npm run test
+
+            - name: Build
+              working-directory: ./client
+              run: npm run build
+
