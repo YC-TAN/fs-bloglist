@@ -12,7 +12,7 @@ const BlogForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    addBlog({
+    await addBlog({
         title: title.value,
         author: author.value,
         url: url.value

@@ -40,7 +40,7 @@ const Blog = () => {
   if (!blog) return <p>Blog not found!</p>;
 
   return (
-    <div className="blog" style={blogStyle}>
+    <div style={blogStyle}>
       <h1>
         {blog.author}: {blog.title}
       </h1>

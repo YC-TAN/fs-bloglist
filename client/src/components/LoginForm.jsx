@@ -8,9 +8,9 @@ const LoginForm = () => {
   const password = useField("password");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login({
+    await login({
       username: username.value,
       password: password.value,
     });

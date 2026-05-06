@@ -22,7 +22,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   // workers: process.env.CI ? 1 : undefined,
-  timeout: 3000,
+  timeout: 30000,
   fullyParallel: false,
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -76,8 +76,8 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run start:test',
-    url: 'http://localhost:3001',
+    command: 'npm run start:test --prefix ../.',
+    url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
   },
 });
