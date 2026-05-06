@@ -30,6 +30,9 @@ jobs:
               with:
                 node-version: '24'
 
+            - name: Install root dependencies
+              run: npm install
+
             - name: Install server dependencies
               working-directory: ./server
               run: npm install  
@@ -55,16 +58,16 @@ jobs:
               run: npm run build
 
             - name: Install Playwright Browsers
-              working-directory: ./client
+              working-directory: ./e2e
               run: npx playwright install --with-deps
 
             - name: Run Playwright tests
-              working-directory: ./client
+              working-directory: ./e2e
               run: npx playwright test
 
             - uses: actions/upload-artifact@v4
               if: ${{ !cancelled() }}
               with:
                 name: playwright-report
-                path: playwright-report/
+                path: e2e/playwright-report/
                 retention-days: 30
