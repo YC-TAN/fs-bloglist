@@ -34,7 +34,7 @@ const App = () => {
           {user ? (
             <div>
               <Button color="inherit" component={Link} to="/new" sx={style}>
-                NEW BLOG
+                New Blog
               </Button>
               <button onClick={() => logout()}>logout</button>
             </div>

@@ -13,7 +13,7 @@ const BlogList = () => {
       <h2>blogs</h2>
       <ul>
         {sortedBlogs.map((b) => (
-          <li key={b.id}>
+          <li key={b.id} className="blog">
             <Link to={`/blogs/${b.id}`}>{b.title}</Link>
           </li>
         ))}
