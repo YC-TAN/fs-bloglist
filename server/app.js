@@ -42,6 +42,14 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
+app.get('/version', (req, res) => {
+  res.send('1') // change this string to ensure a new version deployed
+})
+
+app.get('/health', (req, res) => {
+  res.send('ok')
+})
+
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
