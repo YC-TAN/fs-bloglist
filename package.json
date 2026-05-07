@@ -2,6 +2,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
     "start:test": "concurrently \"npm run start:test --prefix server\" \"npm run dev --prefix client\"",
+    "install:all": "NODE_ENV=production npm install --prefix server && npm install --prefix client",
     "build": "npm run build --prefix client",
     "start": "NODE_ENV=production npm start --prefix server",
     "deploy": "npm run build && npm start"
