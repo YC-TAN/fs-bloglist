@@ -75,3 +75,64 @@ jobs:
                 name: playwright-report
                 path: e2e/playwright-report/
                 retention-days: 30
+    
+    deploy:
+      needs: [setup_and_test]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Trigger deployment
+          if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ','), '#skip') }}
+          run: curl ${{secrets.RENDER_DEPLOY_HOOK}}
+
+    notify_success:
+      needs: [deploy]
+      runs-on: ubuntu-latest
+      if: ${{ github.event_name == 'push' && success() }}
+      steps:
+        - name: Success notification
+          uses: sarisia/actions-status-discord@v1        
+          with:
+            webhook: ${{ secrets.WEBHOOK_URL }}
+            status: ${{ job.status }}
+            nodetail: true
+            content: "✅Deployment successful!" 
+            title: "deployment"
+            description: |
+              **Commit:** ${{ github.sha}}
+              **Message:** ${{ github.event.head_commit.message }}
+              **Author:** ${{ github.event.head_commit.author.name }}
+    
+    notify_failure:
+      needs: [setup_and_test, deploy]
+      runs-on: ubuntu-latest
+      if: ${{ always() && failure() }}
+      steps: 
+        - name: Failure notification
+          uses: sarisia/actions-status-discord@v1
+          with:
+            webhook: ${{ secrets.WEBHOOK_URL }}
+            status: ${{ job.status }}
+            nodetail: true
+            content: "Build Failed!" 
+            title: "Failure Details"
+            description: |
+              **Repo:** ${{ github.repository }}
+              **Branch:** ${{ github.ref_name }}
+              **Commit:** ${{ github.sha }}
+              **Message:** ${{ github.event.head_commit.message }}
+              **Author:** ${{ github.event.head_commit.author.name }}
+              **Workflow:** ${{ github.workflow }}
+              **Job:** ${{ github.job }}
+              [View Commit](${{ github.event.head_commit.url }}) 
+              [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+    tag_release:
+      needs: [deploy]
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v6
+        - name: Bump version and push tag
+          uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            DEFAULT_BUMP: patch
