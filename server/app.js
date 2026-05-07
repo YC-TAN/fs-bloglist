@@ -36,11 +36,19 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../bloglist-frontend/dist')))
+  app.use(express.static(path.join(__dirname, '../client/dist')))
   app.get('/*splat', (req, res) => {
-    res.sendFile(path.join(__dirname, '../bloglist-frontend/dist/index.html'))
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'))
   })
 }
+
+app.get('/version', (req, res) => {
+  res.send('1') // change this string to ensure a new version deployed
+})
+
+app.get('/health', (req, res) => {
+  res.send('ok')
+})
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
