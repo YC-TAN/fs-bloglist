@@ -75,3 +75,11 @@ jobs:
                 name: playwright-report
                 path: e2e/playwright-report/
                 retention-days: 30
+    
+    deploy:
+      needs: [setup_and_test]
+      runs-on: ubuntu-laytest
+      steps:
+        - name: Trigger deployment
+          if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ','), '#skip') }}
+          run: curl ${{secrets.RENDER_DEPLOY_HOOK}}
