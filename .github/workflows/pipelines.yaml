@@ -78,7 +78,7 @@ jobs:
     
     deploy:
       needs: [setup_and_test]
-      runs-on: ubuntu-laytest
+      runs-on: ubuntu-latest
       steps:
         - name: Trigger deployment
           if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ','), '#skip') }}
