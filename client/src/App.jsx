@@ -8,6 +8,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import Notification from "./components/Notification";
+import Health from "./components/Health";
 import NotFound from "./components/NotFound";
 import { useUser, useUserActions } from "./store/user";
 
@@ -76,6 +77,14 @@ const App = () => {
           element={
             <ErrorBoundary>
               <BlogForm />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path="/health"
+          element={
+            <ErrorBoundary>
+              <Health />
             </ErrorBoundary>
           }
         />
