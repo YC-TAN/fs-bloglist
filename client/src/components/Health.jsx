@@ -9,7 +9,7 @@ const Health = () => {
       try {
         const data = await healthService.getHealth();
         setStatus(data);
-      } catch (error) {
+      } catch {
         setStatus("Server unavailable");
       }
     };
